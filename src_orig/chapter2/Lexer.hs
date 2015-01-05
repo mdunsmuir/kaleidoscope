@@ -5,11 +5,16 @@ import Text.Parsec.Language (emptyDef)
 
 import qualified Text.Parsec.Token as Tok
 
-lexer = Tok.makeTokenParser emptyDef {
-          Tok.reservedNames = ["def", "extern"],
-          Tok.reservedOpNames = ["+", "*", "-", ";"],
-          Tok.commentLine = "#"
-        }
+lexer :: Tok.TokenParser ()
+lexer = Tok.makeTokenParser style
+  where
+    ops = ["+","*","-",";"]
+    names = ["def","extern"]
+    style = emptyDef {
+               Tok.commentLine = "#"
+             , Tok.reservedOpNames = ops
+             , Tok.reservedNames = names
+             }
 
 integer :: Parser Integer
 integer = Tok.integer lexer
